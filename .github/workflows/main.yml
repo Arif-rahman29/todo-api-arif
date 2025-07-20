@@ -89,7 +89,7 @@ jobs:
 
       - name: Replace image tag
         run: |
-          sed "s|__IMAGE_TAG__|${{ github.sha }}|g" deployment.yaml > deployment.generated.yaml
-
+          sed "s|__IMAGE_TAG__|$GITHUB_SHA|g" k8s/deployment.yaml > k8s/deployment.generated.yaml
+          
       - name: Apply Deployment
-        run: kubectl apply -f deployment.generated.yaml
+        run: kubectl apply -f k8s/deployment.generated.yaml
