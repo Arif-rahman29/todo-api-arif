@@ -93,3 +93,5 @@ jobs:
           
       - name: Apply Deployment
         run: kubectl apply -f k8s/deployment.generated.yaml
+        env:
+          USE_GKE_GCLOUD_AUTH_PLUGIN: "False"
