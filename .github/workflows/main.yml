@@ -84,14 +84,16 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
 
       - name: Get GKE credentials
-        run: |
-          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --zone ${{ secrets.GKE_ZONE }} --project ${{ secrets.GCP_PROJECT_ID }}
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: ${{ secrets.GKE_CLUSTER_NAME }}
+          location: ${{ secrets.GKE_ZONE }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Replace image tag
         run: |
           sed "s|__IMAGE_TAG__|$GITHUB_SHA|g" k8s/deployment.yaml > k8s/deployment.generated.yaml
           
       - name: Apply Deployment
-        run: kubectl apply -f k8s/deployment.generated.yaml --validate=false
-        env:
-          USE_GKE_GCLOUD_AUTH_PLUGIN: "False"
+        run: kubectl apply -f k8s/deployment.generated.yaml
+       
